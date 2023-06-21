@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Carrito.scss'
 
 const Carrito = ({ pokemon, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
@@ -15,17 +16,17 @@ const Carrito = ({ pokemon, onAddToCart }) => {
   };
 
   return (
-    <div>
-      <label>
+    <div >
+      <label className='Cantidad'>
         Cantidad:
-        <input
+      </label>
+      <input className='Input'
           type="number"
           min="1"
           max="5"
           value={quantity}
           onChange={handleQuantityChange}
         />
-      </label>
       <button onClick={handleAddToCart}>Agregar al Carrito</button>
     </div>
   );

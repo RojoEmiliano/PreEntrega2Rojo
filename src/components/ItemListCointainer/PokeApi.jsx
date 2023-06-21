@@ -65,7 +65,7 @@ const handleCarrito = (pokemon, quantity) => {
             <h4 className='Nombre'>{pokemon.name}</h4>
             <p className='Precio'>Price: {pokemon.price}</p>
             <img className='Img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`} alt={pokemon.name} />
-            <Carrito pokemon={pokemon} onAddToCart={handleCarrito} />
+            <Carrito className='AgregarCarrito' pokemon={pokemon} onAddToCart={handleCarrito} />
             <Link className='Precio' to="/Productos/Detalles">Detalles</Link>
           </div>
         ))}
