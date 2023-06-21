@@ -1,0 +1,25 @@
+.DetallesContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+    border: 10px solid #ed9b40;
+    h2{
+        font-weight: 300;
+        font-size: large;
+    }
+    h1{
+        font-weight: 500;
+        font-size: large;
+    }
+    img{
+        width: 500px;
+        height: 500px;
+    }
+
+    Link{
+        color: black;
+        
+    }
+}

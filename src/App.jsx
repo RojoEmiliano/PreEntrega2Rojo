@@ -9,6 +9,7 @@ import Index from './components/Inicio/Index'
 import Footer from './components/Footer/Footer'
 import { SobreNosotros } from './components/SobreNosotros/SobreNosotros'
 import Contacto from './components/Contacto/Contacto'
+import Detalles from './components/Detalles/Detalles'
 
 
 
@@ -22,6 +23,8 @@ function App() {
         <Route path='/Productos' element={<PokemonList/>} />
         <Route path='/SobreNosotros' element={<SobreNosotros/>} />
         <Route path='/Contacto' element={<Contacto/>} />
+        <Route path='/Productos/Detalles' element={<Detalles/>} />
+        
       </Routes>
       <Footer/>
     </BrowserRouter>

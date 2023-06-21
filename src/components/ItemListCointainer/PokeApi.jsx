@@ -2,18 +2,25 @@ import './PokeApi.scss'
 import React, { useEffect, useState } from 'react';
 import Carrito from '../Carrito/Carrito'
 import { FaShoppingCart, FaDollarSign, FaTrashAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const PokemonList = () => {
   const [pokemonData, setPokemonData] = useState([]);
   const [resetClicked, setResetClicked] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
 
   const handleReset = () => {
     setResetClicked(true);
     setCartCount(0);
     setTotalPrice(0);
   };
+
+  const handleDetails = (pokemon) => {
+    setSelectedPokemon(pokemon);
+  };
+  
   
 const handleCarrito = (pokemon, quantity) => {
   console.log('Adding to cart:', pokemon.name);
@@ -56,11 +63,18 @@ const handleCarrito = (pokemon, quantity) => {
         {pokemonData.map((pokemon, index) => (
           <div className='ListaPokemones' key={pokemon.name}>
             <h4 className='Nombre'>{pokemon.name}</h4>
-            <p className='Precio'>Price: ${pokemon.price}</p>
+            <p className='Precio'>Price: {pokemon.price}</p>
             <img className='Img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`} alt={pokemon.name} />
             <Carrito pokemon={pokemon} onAddToCart={handleCarrito} />
+            <Link className='Precio' to="/Productos/Detalles">Detalles</Link>
           </div>
         ))}
+      {selectedPokemon && (
+  <div className="DetallesPokemon">
+    <h2>Detalles de {selectedPokemon.name}</h2>
+    <p></p>
+  </div>
+)}
 
       </div>
     </div>
