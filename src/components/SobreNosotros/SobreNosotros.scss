@@ -1,0 +1,15 @@
+.sobreNosotrosContainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: 10px solid #ed9b40;
+    h2{
+        padding: 40px;
+        font-size: large;
+        font-weight: 300;
+    }
+    p{
+        padding: 40px;
+        font-weight: 100;
+    }
+}
