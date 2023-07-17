@@ -53,3 +53,15 @@
     display: flex;
     justify-content: center;
 }
+
+.Btn{
+    margin: 5px;
+    padding: 5px;
+    background-color: #ed9b40;
+    text-decoration: none;
+    color: black;
+}
+
+.Btn:hover{
+    transform: scale(1.1);
+}
