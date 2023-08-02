@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import './CheckOut.scss'
+import './CheckOut.scss';
+import { useCartContext } from '../CartContext/CartContext';
+import { Link, Navigate } from 'react-router-dom';
 
 const Checkout = () => {
+  const { cartItems } = useCartContext();
+  const { totalPrice } = useCartContext();
+  const [orderId, setOrderID] = useState(null)
+
   const [values, setValues] = useState({
     Email: '',
     Nombre: '',
@@ -11,16 +17,27 @@ const Checkout = () => {
     Codigo: '',
   });
 
-  const handleSubmit = async (e) => {
+  const [formSubmitted, setFormSubmitted] = useState(false); // Estado para controlar el envío del formulario
+
+  const orden = {
+    cliente: values,
+    items: cartItems,
+    total: totalPrice,
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      // Guardar los datos en Firebase
-      await addDoc(collection(db, "formulario"), values);
-
-      console.log("Datos enviados correctamente a Firebase");
-    } catch (error) {
-      console.error("Error al enviar los datos:", error);
+    
+    // Verificar si el formulario ya ha sido enviado
+    if (!formSubmitted) {
+      addDoc(collection(db, "orders"), orden)
+        .then((doc) => {
+          setOrderID(doc.id);
+          setFormSubmitted(true); // Marcar el formulario como enviado
+        })
+        .catch((error) => {
+          console.error("Error al enviar el formulario:", error);
+        });
     }
   };
 
@@ -30,6 +47,24 @@ const Checkout = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  if (orderId) {
+    return (
+      <div className='FormContainer'>
+        <h2>Tu compra fue realizada con exito.</h2>
+        <hr />
+        <h4>Tu numero de compra es: {orderId} </h4>
+        <hr />
+        <button className='Btn'><Link to="/">Volver al Inicio</Link></button>
+      </div>
+    )
+  }
+
+  if (cartItems.length === 0) {
+    return(
+      <Navigate to="/"/>
+    )
+  }
 
   return (
     <div className='Container'>
@@ -74,11 +109,14 @@ const Checkout = () => {
             placeholder='Codigo Postal'
             required
           />
-          <button className='Btn' type="submit">Finalizar Compra</button>
+          <button className='Btn' type="submit" disabled={formSubmitted}>
+            {formSubmitted ? "Formulario enviado" : "Finalizar Compra"}
+          </button>
         </form>
       </div>
     </div>
-  )
+  );
 };
 
 export default Checkout;
+

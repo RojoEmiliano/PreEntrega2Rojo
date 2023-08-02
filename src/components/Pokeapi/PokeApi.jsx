@@ -5,40 +5,31 @@ import { FaShoppingCart, FaDollarSign, FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import { useCartContext } from '../CartContext/CartContext';
 
 const PokemonList = () => {
   const [pokemonData, setPokemonData] = useState([]);
-  const [resetClicked, setResetClicked] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Estado para almacenar la categoría seleccionada
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [addedToCartProducts, setAddedToCartProducts] = useState([]);
+
+  const { cartCount, totalPrice, addToCart, resetCart } = useCartContext();
 
   const handleReset = () => {
-    setResetClicked(true);
-    setCartCount(0);
-    setTotalPrice(0);
-    localStorage.setItem('cartCount', 0);
-    localStorage.setItem('totalPrice', 0);
+    resetCart();
+    setAddedToCartProducts([]);
   };
 
   const handleDetails = (pokemon) => {
     setSelectedPokemon(pokemon);
   };
 
-  const handleCarrito = (pokemon, quantity) => {
-    console.log('Adding to cart:', pokemon.Nombre);
-    console.log('Quantity:', quantity);
-
-    const updatedCount = cartCount + quantity;
-    const updatedTotalPrice = totalPrice + (pokemon.Precio * quantity);
-
-    localStorage.setItem('cartCount', updatedCount);
-    localStorage.setItem('totalPrice', updatedTotalPrice);
-
-    setCartCount(updatedCount);
-    setTotalPrice(updatedTotalPrice);
+  const handleCarrito = (pokemon, quantity, Id, Precio) => {
+    if (!addedToCartProducts.includes(pokemon.Nombre)) {
+      addToCart(pokemon, quantity, Id, Precio);
+      setAddedToCartProducts([...addedToCartProducts, pokemon.Nombre, pokemon.Id, pokemon.Precio, pokemon.quantity]);
+    }
   };
 
   const handleCategoryChange = (category) => {
@@ -47,10 +38,14 @@ const PokemonList = () => {
 
   useEffect(() => {
     const prodRef = collection(db, "Pokemones");
-
+  
     getDocs(prodRef)
       .then((resp) => {
-        const items = resp.docs.map((doc) => doc.data());
+        const items = resp.docs.map((doc) => {
+          const data = doc.data();
+          data.id = doc.id; // Agregar el Id del documento como una propiedad "id" en el objeto
+          return data;
+        });
         setPokemonData(items);
         setIsLoading(false);
       })
@@ -59,7 +54,7 @@ const PokemonList = () => {
         setIsLoading(false);
       });
   }, []);
-
+  
   const filteredPokemonData = selectedCategory
     ? pokemonData.filter((pokemon) => pokemon.Categoria === selectedCategory)
     : pokemonData;
@@ -88,10 +83,10 @@ const PokemonList = () => {
       <hr />
       <div className="CarritoInfo">
         <p className="CarritoItem">
-          <FaShoppingCart />:{localStorage.getItem('cartCount')}
+          <FaShoppingCart />:{cartCount}
         </p>
         <p className="CarritoItem">
-          <FaDollarSign />: {localStorage.getItem('totalPrice')}
+          <FaDollarSign />: {totalPrice}
         </p>
       </div>
       <div className="CarritoInfo">
@@ -101,7 +96,7 @@ const PokemonList = () => {
       </div>
       <div className="CarritoInfo">
         <button className="checkOut">
-          <Link className='Btn' to="/Productos/FinalizarCompra">Finalizar compra</Link>
+          <Link className='Btn' to="/Productos/Cart">Finalizar compra</Link>
         </button>
       </div>
       {isLoading ? (
@@ -114,7 +109,12 @@ const PokemonList = () => {
               <p className="Precio">Precio: ${pokemon.Precio}</p>
               <p className="Precio">Stock: {pokemon.Stock}</p>
               <img className="Img" src={pokemon.Img} alt={pokemon.name} />
-              <Carrito className="AgregarCarrito" pokemon={pokemon} onAddToCart={handleCarrito} />
+              <Carrito
+                className="AgregarCarrito"
+                pokemon={pokemon}
+                onAddToCart={handleCarrito}
+                disabled={addedToCartProducts.includes(pokemon.Nombre)}
+              />
               <Link className="Precio" to="/Productos/Detalles" onClick={() => handleDetails(pokemon)}>Detalles</Link>
             </div>
           ))}
@@ -131,4 +131,5 @@ const PokemonList = () => {
 };
 
 export default PokemonList;
+
 
