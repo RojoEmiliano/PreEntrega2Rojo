@@ -13,7 +13,7 @@ const Cart = () => {
 
 
   return (
-    <div>
+    <div className='Container'>
       <h1>Carrito de Compras</h1>
       {cartItems.length === 0 ? (
         <p>No hay elementos en el carrito</p>
@@ -21,15 +21,15 @@ const Cart = () => {
         <div>
           <ul>
             {cartItems.map((item) => (
-              <li key={item.pokemon.id}>
+              <li className='ItemList' key={item.pokemon.id}>
                 {item.pokemon.Nombre} - Cantidad: {item.quantity}
-                <button onClick={() => removeFromCart(item.pokemon.id)}>Eliminar</button>
+                <button className='Btn' onClick={() => removeFromCart(item.pokemon.id)}>Eliminar</button>
               </li>
             ))}
           </ul>
-          <button onClick={handleReset}>Vaciar Carrito</button>
+          <button className='Btn' onClick={handleReset}>Vaciar Carrito</button>
           <div>
-            <Link to="/Productos/Checkout"> <button> Finalizar Compra </button>  </Link>
+            <Link className='Link' to="/Productos/Checkout"> <button className='Btn'> Finalizar Compra </button>  </Link>
           </div>
         </div>
       )}

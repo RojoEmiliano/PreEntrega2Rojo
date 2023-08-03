@@ -6,7 +6,7 @@ import { useCartContext } from '../CartContext/CartContext';
 import { Link, Navigate } from 'react-router-dom';
 
 const Checkout = () => {
-  const { cartItems } = useCartContext();
+  const { cartItems, resetCart } = useCartContext();
   const { totalPrice } = useCartContext();
   const [orderId, setOrderID] = useState(null)
 
@@ -33,7 +33,9 @@ const Checkout = () => {
       addDoc(collection(db, "orders"), orden)
         .then((doc) => {
           setOrderID(doc.id);
+          resetCart()
           setFormSubmitted(true); // Marcar el formulario como enviado
+
         })
         .catch((error) => {
           console.error("Error al enviar el formulario:", error);
@@ -51,9 +53,9 @@ const Checkout = () => {
   if (orderId) {
     return (
       <div className='FormContainer'>
-        <h2>Tu compra fue realizada con exito.</h2>
+        <h2 classname="Titulo">Tu compra fue realizada con exito.</h2>
         <hr />
-        <h4>Tu numero de compra es: {orderId} </h4>
+        <h4 className='Subtitulo'>Tu numero de compra es: {orderId} </h4>
         <hr />
         <button className='Btn'><Link to="/">Volver al Inicio</Link></button>
       </div>

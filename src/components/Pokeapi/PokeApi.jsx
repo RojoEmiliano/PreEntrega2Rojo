@@ -13,7 +13,6 @@ const PokemonList = () => {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [addedToCartProducts, setAddedToCartProducts] = useState([]);
-
   const { cartCount, totalPrice, addToCart, resetCart } = useCartContext();
 
   const handleReset = () => {
@@ -21,9 +20,7 @@ const PokemonList = () => {
     setAddedToCartProducts([]);
   };
 
-  const handleDetails = (pokemon) => {
-    setSelectedPokemon(pokemon);
-  };
+
 
   const handleCarrito = (pokemon, quantity, Id, Precio) => {
     if (!addedToCartProducts.includes(pokemon.Nombre)) {
@@ -115,15 +112,9 @@ const PokemonList = () => {
                 onAddToCart={handleCarrito}
                 disabled={addedToCartProducts.includes(pokemon.Nombre)}
               />
-              <Link className="Precio" to="/Productos/Detalles" onClick={() => handleDetails(pokemon)}>Detalles</Link>
+              <Link className="Precio" to={`/Productos/Detalles/${pokemon.id}`}>Detalles</Link>
             </div>
           ))}
-          {selectedPokemon && (
-            <div className="DetallesPokemon">
-              <h2>Detalles de {selectedPokemon.name}</h2>
-              <p></p>
-            </div>
-          )}
         </div>
       )}
     </div>

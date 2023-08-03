@@ -29,7 +29,7 @@ function App() {
           <Route path='/Productos' element={<PokemonList/>} />
           <Route path='/SobreNosotros' element={<SobreNosotros/>} />
           <Route path='/Contacto' element={<Contacto/>} />
-          <Route path='/Productos/Detalles' element={<Detalles/>} />
+          <Route path='/Productos/Detalles/:id' element={<Detalles/>} />
           <Route path='/Productos/Cart' element={<Cart/>} />
           <Route path='/Productos/Checkout' element={<Checkout/>} />
         </Routes>

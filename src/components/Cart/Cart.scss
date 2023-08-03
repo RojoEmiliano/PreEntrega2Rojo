@@ -1,0 +1,14 @@
+.Container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.ItemList{
+        padding: 5px;
+        border: 10px solid #a18262;
+        margin-bottom: 80px;
+        background-color: white;
+}
